@@ -116,84 +116,65 @@
   </div>
 
   <script>
-    const santaAssignments = {
-      "JULIA KHAWATER": "AZEEZ ALSUBHI",
-      "AZEEZ ALSUBHI": "MOHAMED MANSOUR",
-      "MOHAMED MANSOUR": "MMLKH",
-      "MMLKH": "BANA WA NAYA",
-      "BANA WA NAYA": "FAIZAH KABSH",
-      "FAIZAH KABSH": "NABLE AL-ALEM",
-      "NABLE AL-ALEM": "JULIA KHAWATER"
-    };
+   const santaAssignments = {
+  "JULIA KHAWATER": "AZEEZ ALSUBHI",
+  "AZEEZ ALSUBHI": "MOHAMED MANSOUR",
+  "MOHAMED MANSOUR": "MMLKH",
+  "MMLKH": "BANA WA NAYA",
+  "BANA WA NAYA": "FAIZAH KABSH",
+  "FAIZAH KABSH": "NABLE AL-ALEM",
+  "NABLE AL-ALEM": "JULIA KHAWATER"
+};
 
-    const displayNames = {
-      "JULIA KHAWATER": "خواطر",
-      "FAIZAH KABSH": "فايزة",
-      "NABLE AL-ALEM": "نبيل",
-      "AZEEZ ALSUBHI": "عزيز",
-      "BANA WA NAYA": "بانا ونايا",
-      "MOHAMED MANSOUR": "محمد",
-      "MMLKH": "عبدالرحمن"
-    };
+const displayNames = {
+  "JULIA KHAWATER": "خواطر",
+  "FAIZAH KABSH": "فايزة",
+  "NABLE AL-ALEM": "نبيل",
+  "AZEEZ ALSUBHI": "عزيز",
+  "BANA WA NAYA": "بانا ونايا",
+  "MOHAMED MANSOUR": "محمد",
+  "MMLKH": "عبدالرحمن"
+};
 
-    const reverseNames = {};
-    for (const key in displayNames) {
-      reverseNames[displayNames[key]] = key;
-    }
+const nameInput = document.getElementById("nameInput");
+const result = document.getElementById("result");
+const submitBtn = document.getElementById("submitBtn");
 
-    const nameInput = document.getElementById('nameInput');
-    const result = document.getElementById('result');
-    const submitBtn = document.getElementById('submitBtn');
+function normalizeEnglishName(value){
+  return value.trim().replace(/\s+/g," ").toUpperCase();
+}
 
-    function normalizeEnglishName(value) {
-      return value.trim().replace(/\s+/g, ' ').toUpperCase();
-    }
+function showAssignment(){
 
-    function normalizeArabicName(value) {
-      return value.trim().replace(/\s+/g, ' ');
-    }
+  const rawValue = nameInput.value;
 
-    function resolveInputToKey(value) {
-      const englishKey = normalizeEnglishName(value);
-      if (santaAssignments[englishKey]) {
-        return englishKey;
-      }
+  if(!rawValue.trim()){
+    result.textContent = "الرجاء كتابة اسمك.";
+    return;
+  }
 
-      const arabicKey = reverseNames[normalizeArabicName(value)];
-      if (arabicKey) {
-        return arabicKey;
-      }
+  const key = normalizeEnglishName(rawValue);
 
-      return null;
-    }
+  if(!santaAssignments[key]){
+    result.textContent = "الاسم غير موجود في القائمة.";
+    return;
+  }
 
-    function showAssignment() {
-      const rawValue = nameInput.value;
-      const key = resolveInputToKey(rawValue);
+  const giverDisplay = displayNames[key];
+  const giftedKey = santaAssignments[key];
+  const giftedDisplay = displayNames[giftedKey];
 
-      if (!rawValue.trim()) {
-        result.textContent = 'الرجاء كتابة اسمك.';
-        return;
-      }
+  result.textContent =
+    `يا ${giverDisplay}، هديتك هذا العيد ستكون لـ ${giftedDisplay} ✨`;
+}
 
-      if (!key) {
-        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم بشكل صحيح.';
-        return;
-      }
+submitBtn.addEventListener("click", showAssignment);
 
-      const giverDisplay = displayNames[key] || key;
-      const giftedKey = santaAssignments[key];
-      const giftedDisplay = displayNames[giftedKey] || giftedKey;
-
-      result.textContent = `يا ${giverDisplay}، هديتك هذا العيد ستكون لـ ${giftedDisplay} ✨`;
-    }
-
-    submitBtn.addEventListener('click', showAssignment);
-    nameInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
-        showAssignment();
-      }
-    });
+nameInput.addEventListener("keydown", function(event){
+  if(event.key === "Enter"){
+    showAssignment();
+  }
+});
   </script>
 </body>
 </html>
