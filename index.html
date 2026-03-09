@@ -119,6 +119,16 @@
       "NABLE AL-ALEM": "JULIA KHAWATER"
     };
 
+    // Arabic display names
+    const displayNames = {
+      "JULIA KHAWATER": "خواطر",
+      "FAIZAH KABSH": "فايزة",
+      "NABLE AL-ALEM": "نبيل",
+      "AZEEZ ALSUBHI": "عزيز",
+      "BANA WA NAYA": "بانا ونايا",
+      "MOHAMED MANSOUR": "محمد"
+    };
+
     // direct mapping now handled in santaAssignments
 
     const nameInput = document.getElementById('nameInput');
@@ -149,8 +159,10 @@
 
       setTimeout(() => {
         loading.style.display = 'none';
-        const giftedPerson = santaAssignments[name];
-        result.textContent = `يا ${name}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
+        const giftedPersonKey = santaAssignments[name];
+        const giftedPerson = displayNames[giftedPersonKey] || giftedPersonKey;
+        const giverDisplay = displayNames[name] || name;
+        result.textContent = `يا ${giverDisplay}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
       }, 2000);
     }
 
