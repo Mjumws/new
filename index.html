@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Secret Santa Lookup</title>
+  <title>سحب هدايا العيد</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,16 +15,17 @@
       display: grid;
       place-items: center;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: linear-gradient(180deg, #f8f4e8 0%, #f3ead2 100%);
       color: #111;
     }
 
     .card {
       width: min(92vw, 520px);
-      background: #fff;
-      border-radius: 18px;
+      background: rgba(255,255,255,0.96);
+      border-radius: 24px;
       padding: 28px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 14px 40px rgba(102, 76, 20, 0.14);
+      border: 2px solid #d9c28a;
     }
 
     h1 {
@@ -59,45 +60,48 @@
       font-size: 16px;
       font-weight: 700;
       border: none;
-      border-radius: 12px;
-      background: #111;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #117a65, #1f9d55);
       color: #fff;
       cursor: pointer;
+      box-shadow: 0 8px 20px rgba(17, 122, 101, 0.25);
     }
 
     .result {
       margin-top: 18px;
       padding: 18px;
       min-height: 72px;
-      border-radius: 12px;
-      background: #f0f0f0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fff8e8, #f7efd9);
+      border: 1px solid #e2d1a1;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       font-size: 1.05rem;
       font-weight: 700;
+      color: #5a4515;
     }
 
     .note {
       margin-top: 12px;
       font-size: 13px;
-      color: #666;
+      color: #7a6840;
       text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>Secret Santa</h1>
-    <p>Enter your name to see who you are gifting.</p>
+    <h1>🎁 سحب هدايا العيد</h1>
+    <p>اكتب اسمك لمعرفة الشخص الذي ستقدّم له هدية العيد.</p>
 
-    <label for="nameInput">Your name</label>
-    <input id="nameInput" type="text" placeholder="Enter your full name" autocomplete="off" />
-    <button id="submitBtn">See My Person</button>
+    <label for="nameInput">اسمك</label>
+    <input id="nameInput" type="text" placeholder="اكتب اسمك الكامل" autocomplete="off" />
+    <button id="submitBtn">اعرض اسمي المسحوب</button>
 
-    <div class="result" id="result">Ready.</div>
-    <div class="note">Use your full name exactly as given in the Secret Santa list.</div>
+    <div class="result" id="result">جاهز ✨</div>
+    <div class="note">استخدم اسمك الكامل كما هو مكتوب في القائمة.</div>
   </div>
 
   <script>
@@ -128,18 +132,18 @@
       const name = normalizeName(nameInput.value);
 
       if (!name) {
-        result.textContent = 'لو سمحتز، ادخل الاسم المعطلى لك';
+        result.textContent = 'الرجاء كتابة اسمك.';
         return;
       }
 
       if (!santaAssignments[name]) {
-        result.textContent = 'مو موجود الاسم هذاز حط الاسم اللي اعطي لك بالضبط.';
+        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم الكامل بشكل صحيح.';
         return;
       }
 
       const giftedPerson = santaAssignments[name];
 
-      result.textContent = ` $${giftedPerson}. -------انت يا طويل العمر بتعايد  ${name} هلا`;
+      result.textContent = `يا ${name}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
     }
 
     submitBtn.addEventListener('click', showAssignment);
