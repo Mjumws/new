@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secret Santa Lookup</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .card {
+      width: min(92vw, 520px);
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.9rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      line-height: 1.5;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 18px;
+      padding: 18px;
+      min-height: 72px;
+      border-radius: 12px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Secret Santa</h1>
+    <p>Enter your name to see who you are gifting.</p>
+
+    <label for="nameInput">Your name</label>
+    <input id="nameInput" type="text" placeholder="Enter A, B, C, D, or E" autocomplete="off" />
+    <button id="submitBtn">See My Person</button>
+
+    <div class="result" id="result">Ready.</div>
+    <div class="note">Names are preset from A to E.</div>
+  </div>
+
+  <script>
+    // Preset random assignment using numbers 1 to 5.
+    // Number map:
+    // 1 = C, 2 = E, 3 = A, 4 = D, 5 = B
+    // So each person gets one unique target.
+    const santaAssignments = {
+      A: 4,
+      B: 1,
+      C: 2,
+      D: 5,
+      E: 3
+    };
+
+    const numberToName = {
+      1: 'C',
+      2: 'E',
+      3: 'A',
+      4: 'D',
+      5: 'B'
+    };
+
+    const nameInput = document.getElementById('nameInput');
+    const result = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function normalizeName(value) {
+      return value.trim().toUpperCase();
+    }
+
+    function showAssignment() {
+      const name = normalizeName(nameInput.value);
+
+      if (!name) {
+        result.textContent = 'Please enter your name.';
+        return;
+      }
+
+      if (!santaAssignments[name]) {
+        result.textContent = 'Name not found. Use A, B, C, D, or E.';
+        return;
+      }
+
+      const assignedNumber = santaAssignments[name];
+      const giftedPerson = numberToName[assignedNumber];
+
+      result.textContent = `Hi ${name} — you are gifting ${giftedPerson}.`;
+    }
+
+    submitBtn.addEventListener('click', showAssignment);
+    nameInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        showAssignment();
+      }
+    });
+  </script>
+</body>
+</html>
