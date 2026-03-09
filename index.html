@@ -17,11 +17,12 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(180deg, #f8f4e8 0%, #f3ead2 100%);
       color: #111;
+      padding: 20px;
     }
 
     .card {
       width: min(92vw, 520px);
-      background: rgba(255,255,255,0.96);
+      background: rgba(255, 255, 255, 0.96);
       border-radius: 24px;
       padding: 28px;
       box-shadow: 0 14px 40px rgba(102, 76, 20, 0.14);
@@ -31,27 +32,32 @@
     h1 {
       margin: 0 0 8px;
       font-size: 1.9rem;
+      text-align: center;
+      color: #7a5a12;
     }
 
     p {
       margin: 0 0 18px;
-      line-height: 1.5;
-      color: #444;
+      line-height: 1.7;
+      color: #5b4b24;
+      text-align: center;
     }
 
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 700;
+      color: #5b4b24;
     }
 
     input {
       width: 100%;
       padding: 12px 14px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
+      border: 1px solid #d5c08a;
+      border-radius: 14px;
       margin-bottom: 12px;
+      background: #fffdf7;
     }
 
     button {
@@ -65,6 +71,10 @@
       color: #fff;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(17, 122, 101, 0.25);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
     }
 
     .result {
@@ -88,6 +98,7 @@
       font-size: 13px;
       color: #7a6840;
       text-align: center;
+      line-height: 1.8;
     }
   </style>
 </head>
@@ -98,29 +109,23 @@
 
     <label for="nameInput">اسمك</label>
     <input id="nameInput" type="text" placeholder="اكتب اسمك الكامل" autocomplete="off" />
-    <button id="submitBtn">اعرض اسم الشخص اللي بعايده </button>
+    <button id="submitBtn" type="button">اعرض نتيجتي</button>
 
     <div class="result" id="result">جاهز ✨</div>
-    <div id="loading" style="display:none;text-align:center;margin-top:10px;font-size:26px;">⏳</div>
-    <div class="note">استخدم اسمك الكامل كما هو مكتوب في القائمة.</div>
+    <div class="note">يمكنك كتابة الاسم الإنجليزي الموجود في القائمة أو الاسم العربي الظاهر لك.</div>
   </div>
 
   <script>
-    // Preset random assignment using numbers 1 to 5.
-    // Number map:
-    // 1 = C, 2 = E, 3 = A, 4 = D, 5 = B
-    // So each person gets one unique target.
     const santaAssignments = {
-      "JULIA KHAWATER": "MMLKH",
-      "MMLKH": "FAIZAH KABSH",
-      "FAIZAH KABSH": "MOHAMED MANSOUR",
-      "MOHAMED MANSOUR": "NABLE AL-ALEM",
-      "NABLE AL-ALEM": "AZEEZ ALSUBHI",
-      "AZEEZ ALSUBHI": "BANA WA NAYA",
-      "BANA WA NAYA": "JULIA KHAWATER"
+      "JULIA KHAWATER": "AZEEZ ALSUBHI",
+      "AZEEZ ALSUBHI": "MOHAMED MANSOUR",
+      "MOHAMED MANSOUR": "MMLKH",
+      "MMLKH": "BANA WA NAYA",
+      "BANA WA NAYA": "FAIZAH KABSH",
+      "FAIZAH KABSH": "NABLE AL-ALEM",
+      "NABLE AL-ALEM": "JULIA KHAWATER"
     };
 
-    // Arabic display names
     const displayNames = {
       "JULIA KHAWATER": "خواطر",
       "FAIZAH KABSH": "فايزة",
@@ -131,55 +136,60 @@
       "MMLKH": "عبدالرحمن"
     };
 
-    // direct mapping now handled in santaAssignments
+    const reverseNames = {};
+    for (const key in displayNames) {
+      reverseNames[displayNames[key]] = key;
+    }
 
     const nameInput = document.getElementById('nameInput');
     const result = document.getElementById('result');
     const submitBtn = document.getElementById('submitBtn');
 
-    function normalizeName(value) {
-      return value.trim().toUpperCase();
+    function normalizeEnglishName(value) {
+      return value.trim().replace(/\s+/g, ' ').toUpperCase();
+    }
+
+    function normalizeArabicName(value) {
+      return value.trim().replace(/\s+/g, ' ');
+    }
+
+    function resolveInputToKey(value) {
+      const englishKey = normalizeEnglishName(value);
+      if (santaAssignments[englishKey]) {
+        return englishKey;
+      }
+
+      const arabicKey = reverseNames[normalizeArabicName(value)];
+      if (arabicKey) {
+        return arabicKey;
+      }
+
+      return null;
     }
 
     function showAssignment() {
-      const name = normalizeName(nameInput.value);
+      const rawValue = nameInput.value;
+      const key = resolveInputToKey(rawValue);
 
-      if (!name) {
+      if (!rawValue.trim()) {
         result.textContent = 'الرجاء كتابة اسمك.';
         return;
       }
 
-      if (!santaAssignments[name]) {
-        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم كما تمت مشاركته معك.';
+      if (!key) {
+        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم بشكل صحيح.';
         return;
       }
 
-      // show loading
-      const loading = document.getElementById('loading');
-      loading.style.display = 'block';
-      result.textContent = '';
+      const giverDisplay = displayNames[key] || key;
+      const giftedKey = santaAssignments[key];
+      const giftedDisplay = displayNames[giftedKey] || giftedKey;
 
-      setTimeout(() => {
-        loading.style.display = 'none';
-        const giftedPersonKey = santaAssignments[name];
-        const giftedPerson = displayNames[giftedPersonKey] || giftedPersonKey;
-        const giverDisplay = displayNames[name] || name;
-        result.textContent = `يا ${giverDisplay}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
-      }, 2000);
-    }
-
-      if (!santaAssignments[name]) {
-        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم كما تمت مشاركته معك.';
-        return;
-      }
-
-      const giftedPerson = santaAssignments[name];
-
-      result.textContent = `هلا يا ${name}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
+      result.textContent = `يا ${giverDisplay}، هديتك هذا العيد ستكون لـ ${giftedDisplay} ✨`;
     }
 
     submitBtn.addEventListener('click', showAssignment);
-    nameInput.addEventListener('keydown', (event) => {
+    nameInput.addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
         showAssignment();
       }
