@@ -93,11 +93,11 @@
     <p>Enter your name to see who you are gifting.</p>
 
     <label for="nameInput">Your name</label>
-    <input id="nameInput" type="text" placeholder="Enter A, B, C, D, or E" autocomplete="off" />
+    <input id="nameInput" type="text" placeholder="Enter your full name" autocomplete="off" />
     <button id="submitBtn">See My Person</button>
 
     <div class="result" id="result">Ready.</div>
-    <div class="note">Names are preset from A to E.</div>
+    <div class="note">Use your full name exactly as given in the Secret Santa list.</div>
   </div>
 
   <script>
@@ -106,20 +106,15 @@
     // 1 = C, 2 = E, 3 = A, 4 = D, 5 = B
     // So each person gets one unique target.
     const santaAssignments = {
-      A: 4,
-      B: 1,
-      C: 2,
-      D: 5,
-      E: 3
+      "JULIA KHAWATER": "FAIZAH KABSH",
+      "FAIZAH KABSH": "MOHAMED",
+      "MOHAMED": "BANA WA NAYA",
+      "BANA WA NAYA": "AZEEZ ALSUBHI",
+      "AZEEZ ALSUBHI": "NABLE AL-ALEM",
+      "NABLE AL-ALEM": "JULIA KHAWATER"
     };
 
-    const numberToName = {
-      1: 'C',
-      2: 'E',
-      3: 'A',
-      4: 'D',
-      5: 'B'
-    };
+    // direct mapping now handled in santaAssignments
 
     const nameInput = document.getElementById('nameInput');
     const result = document.getElementById('result');
@@ -133,19 +128,18 @@
       const name = normalizeName(nameInput.value);
 
       if (!name) {
-        result.textContent = 'Please enter your name.';
+        result.textContent = 'لو سمحتز، ادخل الاسم المعطلى لك';
         return;
       }
 
       if (!santaAssignments[name]) {
-        result.textContent = 'Name not found. Use A, B, C, D, or E.';
+        result.textContent = 'مو موجود الاسم هذاز حط الاسم اللي اعطي لك بالضبط.';
         return;
       }
 
-      const assignedNumber = santaAssignments[name];
-      const giftedPerson = numberToName[assignedNumber];
+      const giftedPerson = santaAssignments[name];
 
-      result.textContent = `Hi ${name} — you are gifting ${giftedPerson}.`;
+      result.textContent = ` $${giftedPerson}. -------انت يا طويل العمر بتعايد  ${name} هلا`;
     }
 
     submitBtn.addEventListener('click', showAssignment);
