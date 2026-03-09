@@ -98,7 +98,7 @@
 
     <label for="nameInput">اسمك</label>
     <input id="nameInput" type="text" placeholder="اكتب اسمك الكامل" autocomplete="off" />
-    <button id="submitBtn">اعرض اسمي المسحوب</button>
+    <button id="submitBtn">اعرض اسم الشخص اللي بعايده </button>
 
     <div class="result" id="result">جاهز ✨</div>
     <div id="loading" style="display:none;text-align:center;margin-top:10px;font-size:26px;">⏳</div>
@@ -138,7 +138,7 @@
       }
 
       if (!santaAssignments[name]) {
-        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم الكامل بشكل صحيح.';
+        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم كما تمت مشاركته معك.';
         return;
       }
 
@@ -155,13 +155,13 @@
     }
 
       if (!santaAssignments[name]) {
-        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم الكامل بشكل صحيح.';
+        result.textContent = 'الاسم غير موجود في القائمة. تأكد من كتابة الاسم كما تمت مشاركته معك.';
         return;
       }
 
       const giftedPerson = santaAssignments[name];
 
-      result.textContent = `يا ${name}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
+      result.textContent = `هلا يا ${name}، هديتك هذا العيد ستكون لـ ${giftedPerson} ✨`;
     }
 
     submitBtn.addEventListener('click', showAssignment);
